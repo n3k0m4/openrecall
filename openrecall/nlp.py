@@ -33,31 +33,31 @@ def get_embedding(text: str) -> np.ndarray:
     Returns:
         A numpy array representing the mean embedding of the text lines,
         or a zero vector if the input is empty, whitespace only, or the
-        model failed to load. The array type is float32.
+        model failed to load. The array type is float64.
     """
     if model is None:
         logger.error("SentenceTransformer model is not loaded. Returning zero vector.")
-        return np.zeros(EMBEDDING_DIM, dtype=np.float32)
+        return np.zeros(EMBEDDING_DIM, dtype=np.float64)
 
     if not text or text.isspace():
         logger.warning("Input text is empty or whitespace. Returning zero vector.")
-        return np.zeros(EMBEDDING_DIM, dtype=np.float32)
+        return np.zeros(EMBEDDING_DIM, dtype=np.float64)
 
     # Split text into non-empty lines
     sentences = [line for line in text.split("\n") if line.strip()]
 
     if not sentences:
         logger.warning("No non-empty lines found after splitting. Returning zero vector.")
-        return np.zeros(EMBEDDING_DIM, dtype=np.float32)
+        return np.zeros(EMBEDDING_DIM, dtype=np.float64)
 
     try:
         sentence_embeddings = model.encode(sentences)
         # Calculate the mean embedding
-        mean_embedding = np.mean(sentence_embeddings, axis=0, dtype=np.float32)
+        mean_embedding = np.mean(sentence_embeddings, axis=0, dtype=np.float64)
         return mean_embedding
     except Exception as e:
         logger.error(f"Error generating embedding: {e}")
-        return np.zeros(EMBEDDING_DIM, dtype=np.float32)
+        return np.zeros(EMBEDDING_DIM, dtype=np.float64)
 
 
 def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:

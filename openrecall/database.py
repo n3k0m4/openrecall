@@ -55,7 +55,7 @@ def get_all_entries() -> List[Entry]:
             results = cursor.fetchall()
             for row in results:
                 # Deserialize the embedding blob back into a NumPy array
-                embedding = np.frombuffer(row["embedding"], dtype=np.float32) # Assuming float32, adjust if needed
+                embedding = np.frombuffer(row["embedding"], dtype=np.float64) # Assuming float32, adjust if needed
                 entries.append(
                     Entry(
                         id=row["id"],
@@ -109,7 +109,7 @@ def insert_entry(
         Optional[int]: The ID of the newly inserted row, or None if insertion fails.
                        Prints an error message to stderr on failure.
     """
-    embedding_bytes: bytes = embedding.astype(np.float32).tobytes() # Ensure consistent dtype
+    embedding_bytes: bytes = embedding.astype(np.float64).tobytes() # Ensure consistent dtype
     last_row_id: Optional[int] = None
     try:
         with sqlite3.connect(db_path) as conn:
